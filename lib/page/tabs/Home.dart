@@ -1,11 +1,17 @@
+// 引入配置文件
+import 'package:flutter_shop/model/FocusModel.dart';
+
+import '../../config/Config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
-// 视频选择封装，这里不封装了  直接用最新版本的
+// 将屏幕尺寸 封装到screenAdaper中
 import '../../services/ScreenAdaper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// 也可以使用 flutter http请求，但是这里使用了dio库进行网路请求
+import 'package:dio/dio.dart';
 
 // 没有flutter_swiper 安全版本 运行需要运行这个flutter run --no-sound-null-safety
 
@@ -17,31 +23,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 定义json数据响应变量
+  List _focusData = [];
+
+// 生命周期函数，初始化加载
+  @override
+  void initState() {
+    super.initState();
+    _getFocusData();
+  }
+
+// 请求轮播图数据接口
+  _getFocusData() async {
+    try {
+      var api = '${Config.domain}api/focus';
+      Response response = await Dio().get(api);
+      var focusList = FocusModel.fromJson(response.data);
+      setState(() {
+        this._focusData = focusList.result!;
+        // print(this._focusData);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // 轮播图组件
   Widget _swiperWidget() {
-    List<Map> imgList = [
-      {"url": "https://www.itying.com/images/flutter/slide01.jpg"},
-      {"url": "https://www.itying.com/images/flutter/slide02.jpg"},
-      {"url": "https://www.itying.com/images/flutter/slide03.jpg"},
-    ];
-    return Container(
-      child: AspectRatio(
-        // AspectRatio 设定宽高比，不要设置指定高度，根据图片尺寸来，适配所有设备
-        aspectRatio: 2 / 1,
-        // Swiper轮播图组件 循环次数
-        child: Swiper(
-          itemCount: imgList.length,
-          itemBuilder: (BuildContext context, int index) {
-            // 返回图片
-            return Image.network(imgList[index]['url'],
-                // 设置图片充满容器
-                fit: BoxFit.fill);
-          },
-          pagination: SwiperPagination(),
-          autoplay: true,
+    if (this._focusData.length > 0) {
+      return Container(
+        child: AspectRatio(
+          // AspectRatio 设定宽高比，不要设置指定高度，根据图片尺寸来，适配所有设备
+          aspectRatio: 2 / 1,
+          // Swiper轮播图组件 循环次数
+          child: Swiper(
+            itemCount: _focusData.length,
+            itemBuilder: (BuildContext context, int index) {
+              String pic = this._focusData[index].pic;
+              pic = Config.domain + pic.replaceAll('\\', '/');
+              // 返回图片
+              return Image.network('$pic',
+                  // 设置图片充满容器
+                  fit: BoxFit.fill);
+            },
+            pagination: SwiperPagination(),
+            autoplay: true,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 
 // 文本标题
@@ -95,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   padding: EdgeInsets.only(top: ScreenAdaper.height(10)),
                   height: ScreenAdaper.height(44),
-                  child: Text('第${index}条'),
+                  child: Text('第$index条'),
                 )
               ],
             );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shop/tabs/Tabs.dart';
-import '../Search.dart';
+import '../page/tabs/Tabs.dart';
+import '../page/Search.dart';
 
 // 配置路由
 final Map routes = {
