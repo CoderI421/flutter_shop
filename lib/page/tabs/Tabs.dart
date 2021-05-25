@@ -12,9 +12,10 @@ class Tabs extends StatefulWidget {
 }
 
 class _TabsState extends State<Tabs> {
-  int _currentIndex = 0;
+  // 初始显示哪一个bottom bar
+  int _currentIndex = 1;
   // list中的顺序不能表，要和navigation bar中的顺序一样
-  List _pageList = [HomePage(), CartPage(), CartPage(), UserPage()];
+  List _pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
