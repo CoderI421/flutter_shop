@@ -23,12 +23,18 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+// 方法3、AutomaticKeepAliveClientMixin 保持页面状态 -> with AutomaticKeepAliveClientMixin
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   // 定义json数据响应变量
   List _focusData = [];
   List<ProdctionItemModel> _hotProductionData = [];
   List<ProdctionItemModel> _bestProductionData = [];
 
+  // 方法3、AutomaticKeepAliveClientMixin 保持页面状态 -> with AutomaticKeepAliveClientMixin
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 // 生命周期函数，初始化加载
   @override
   void initState() {

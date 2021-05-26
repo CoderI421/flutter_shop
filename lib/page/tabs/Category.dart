@@ -13,10 +13,17 @@ class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+// 方法3、AutomaticKeepAliveClientMixin 保持页面状态 -> with AutomaticKeepAliveClientMixin
+class _CategoryPageState extends State<CategoryPage>
+    with AutomaticKeepAliveClientMixin {
   int _selectIndex = 0;
   List<CategoryItemModel> _leftCateList = [];
   List _rightCateList = [];
+
+  // 方法3、AutomaticKeepAliveClientMixin 保持页面状态 -> with AutomaticKeepAliveClientMixin
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
