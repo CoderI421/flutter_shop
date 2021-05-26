@@ -149,22 +149,29 @@ class _CategoryPageState extends State<CategoryPage>
                   String pic = Config.domain +
                       this._rightCateList[index].pic.replaceAll('\\', '/');
                   // 每个单位里边两部分 图片和文字
-                  return Container(
-                    child: Column(
-                      children: [
-                        // 图片宽高比容器 充满容器，前提，减去下部分的高度
-                        AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: Image.network("$pic", fit: BoxFit.cover),
-                        ),
-                        Container(
-                          // padding: EdgeInsets.only(top: ScreenAdaper.height(2)),
-                          // 容器中，文字位置
-                          alignment: Alignment.center,
-                          height: ScreenAdaper.height(28),
-                          child: Text('${_rightCateList[index].title}'),
-                        )
-                      ],
+                  // inkWell 可点击部分，然后跳转详情页面
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/productList',
+                          arguments: {'cid': this._rightCateList[index].id});
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          // 图片宽高比容器 充满容器，前提，减去下部分的高度
+                          AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: Image.network("$pic", fit: BoxFit.cover),
+                          ),
+                          Container(
+                            // padding: EdgeInsets.only(top: ScreenAdaper.height(2)),
+                            // 容器中，文字位置
+                            alignment: Alignment.center,
+                            height: ScreenAdaper.height(28),
+                            child: Text('${_rightCateList[index].title}'),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }),
